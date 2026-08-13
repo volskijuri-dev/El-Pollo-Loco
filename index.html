@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>El Pollo Loco</title>
+
+    <link rel="icon" type="image/png" href="img/6_salsa_bottle/salsa_bottle.png">
+    <link rel="stylesheet" href="style.css">
+
+    <script defer src="models/drawable-object.class.js"></script>
+    <script defer src="models/movable-object.class.js"></script>
+
+    <script defer src="models/chicken.class.js"></script>
+    <script defer src="models/small-chicken.class.js"></script>
+    <script defer src="models/character.class.js"></script>
+    <script defer src="models/background-object.class.js"></script>
+    <script defer src="models/cloud.class.js"></script>
+    <script defer src="models/keyboard.class.js"></script>
+    <script defer src="models/coin.class.js"></script>
+    <script defer src="models/status-bar.class.js"></script>
+    <script defer src="models/bottle.class.js"></script>
+    <script defer src="models/throwable-object.class.js"></script>
+    <script defer src="models/endboss.class.js"></script>
+    <script defer src="models/audio-manager.class.js"></script>
+
+    <script defer src="models/world-base.class.js"></script>
+    <script defer src="models/world-check.class.js"></script>
+    <script defer src="models/world-collision.class.js"></script>
+    <script defer src="script.js"></script>
+</head>
+
+<body onload="init()">
+
+    <h1>El Pollo Loco</h1>
+
+    <div id="rotate-message">
+        📱 Bitte drehe dein Gerät ins Querformat
+    </div>
+
+    <div class="game-container">
+
+        <canvas id="canvas" width="720" height="480">
+        </canvas>
+
+        <button id="start-button">
+            Spiel starten
+        </button>
+
+        <button id="mute-button">
+            🔊
+        </button>
+
+        <button id="controls-button">
+            🎮 Steuerung
+        </button>
+
+        <div id="controls-info" class="hidden">
+            <h2>🎮 Steuerung</h2>
+
+            <p>⬅️ ➡️ Laufen</p>
+            <p>⬆️ Springen</p>
+            <p>Leertaste 🍾 Flasche werfen</p>
+
+            <button id="close-controls-button">
+                Schließen
+            </button>
+        </div>
+
+        <div class="mobile-controls">
+
+            <div class="mobile-controls-left">
+                <button id="btn-left">⬅️</button>
+                <button id="btn-right">➡️</button>
+            </div>
+
+            <div class="mobile-controls-right">
+                <button id="btn-jump">⬆️</button>
+                <button id="btn-throw">🍾</button>
+            </div>
+
+        </div>
+
+    </div>
+
+    <button id="restart-button" class="hidden">
+        Nochmal spielen
+    </button>
+
+    <a href="impressum.html" class="impressum-link">
+        Impressum
+    </a>
+
+</body>
+
+</html>
