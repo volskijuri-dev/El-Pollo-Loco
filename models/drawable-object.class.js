@@ -26,9 +26,7 @@ class DrawableObject {
             this.currentImage % images.length;
 
         const path = images[imageIndex];
-
-        const nextImage =
-            this.imageCache[path];
+        const nextImage = this.imageCache[path];
 
         if (nextImage instanceof HTMLImageElement) {
             this.img = nextImage;
@@ -37,18 +35,12 @@ class DrawableObject {
         this.currentImage++;
     }
 
-
     playAnimationOnce(images) {
-        let lastImageIndex = images.length - 1;
-
-        let imageIndex = Math.min(
-            this.currentImage,
+        const lastImageIndex = images.length - 1;
+        const nextImage = this.getAnimationImage(
+            images,
             lastImageIndex
         );
-
-        let path = images[imageIndex];
-
-        const nextImage = this.imageCache[path];
 
         if (nextImage instanceof HTMLImageElement) {
             this.img = nextImage;
@@ -57,5 +49,15 @@ class DrawableObject {
         if (this.currentImage < lastImageIndex) {
             this.currentImage++;
         }
+    }
+
+    getAnimationImage(images, lastImageIndex) {
+        const imageIndex = Math.min(
+            this.currentImage,
+            lastImageIndex
+        );
+
+        const path = images[imageIndex];
+        return this.imageCache[path];
     }
 }

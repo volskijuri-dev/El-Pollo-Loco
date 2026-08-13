@@ -12,27 +12,28 @@ function init() {
 }
 
 function setupButtons() {
-    const restartButton =
-        document.getElementById('restart-button');
-
-    const startButton =
-        document.getElementById('start-button');
-
-    const muteButton =
-        document.getElementById('mute-button');
+    const restartButton = document.getElementById('restart-button');
+    const startButton = document.getElementById('start-button');
+    const muteButton = document.getElementById('mute-button');
 
     restartButton.addEventListener('click', restartGame);
+    setupStartButton(startButton);
+    setupMuteButton(muteButton);
+}
 
-    startButton.addEventListener('click', () => {
+function setupStartButton(button) {
+    button.addEventListener('click', () => {
         world.startGame();
-        startButton.style.display = 'none';
+        button.style.display = 'none';
     });
+}
 
-    updateMuteButton(muteButton);
+function setupMuteButton(button) {
+    updateMuteButton(button);
 
-    muteButton.addEventListener('click', () => {
+    button.addEventListener('click', () => {
         audioManager.toggleMute();
-        updateMuteButton(muteButton);
+        updateMuteButton(button);
     });
 }
 
@@ -59,16 +60,25 @@ function setupMobileControls() {
 
 function bindTouchButton(buttonId, key) {
     const button = document.getElementById(buttonId);
-    
-    button.addEventListener('contextmenu', (event) => {
-    event.preventDefault();
-});
+    disableContextMenu(button);
+    setupTouchStart(button, key);
+    setupTouchEnd(button, key);
+}
 
+function disableContextMenu(button) {
+    button.addEventListener('contextmenu', (event) => {
+        event.preventDefault();
+    });
+}
+
+function setupTouchStart(button, key) {
     button.addEventListener('touchstart', (event) => {
         event.preventDefault();
         keyboard[key] = true;
     });
+}
 
+function setupTouchEnd(button, key) {
     button.addEventListener('touchend', (event) => {
         event.preventDefault();
         keyboard[key] = false;
@@ -88,63 +98,55 @@ function updateMuteButton(button) {
 }
 
 function restartGame() {
-    world.stopGame();
-    audioManager.stopAllSounds();
-
-    keyboard = new Keyboard();
-    world = new World(canvas);
-
-    document
-        .getElementById('restart-button')
-        .classList.add('hidden');
-
-    document
-        .getElementById('start-button')
-        .style.display = 'none';
-
+    stopCurrentGame();
+    createNewGame();
+    hideRestartButton();
+    hideStartButton();
     world.startGame();
 }
 
+function stopCurrentGame() {
+    world.stopGame();
+    audioManager.stopAllSounds();
+}
+
+function createNewGame() {
+    keyboard = new Keyboard();
+    world = new World(canvas);
+}
+
+function hideRestartButton() {
+    document
+        .getElementById('restart-button')
+        .classList.add('hidden');
+}
+
+function hideStartButton() {
+    document
+        .getElementById('start-button')
+        .style.display = 'none';
+}
+
+function setKeyboardKey(event, isPressed) {
+    const keyMap = {
+        ArrowRight: 'RIGHT',
+        ArrowLeft: 'LEFT',
+        ArrowUp: 'UP',
+        ArrowDown: 'DOWN',
+        ' ': 'SPACE'
+    };
+
+    const key = keyMap[event.key];
+
+    if (key) {
+        keyboard[key] = isPressed;
+    }
+}
+
 window.addEventListener('keydown', (event) => {
-    if (event.key === 'ArrowRight') {
-        keyboard.RIGHT = true;
-    }
-
-    if (event.key === 'ArrowLeft') {
-        keyboard.LEFT = true;
-    }
-
-    if (event.key === 'ArrowUp') {
-        keyboard.UP = true;
-    }
-
-    if (event.key === 'ArrowDown') {
-        keyboard.DOWN = true;
-    }
-
-    if (event.key === ' ') {
-        keyboard.SPACE = true;
-    }
+    setKeyboardKey(event, true);
 });
 
 window.addEventListener('keyup', (event) => {
-    if (event.key === 'ArrowRight') {
-        keyboard.RIGHT = false;
-    }
-
-    if (event.key === 'ArrowLeft') {
-        keyboard.LEFT = false;
-    }
-
-    if (event.key === 'ArrowUp') {
-        keyboard.UP = false;
-    }
-
-    if (event.key === 'ArrowDown') {
-        keyboard.DOWN = false;
-    }
-
-    if (event.key === ' ') {
-        keyboard.SPACE = false;
-    }
+    setKeyboardKey(event, false);
 });

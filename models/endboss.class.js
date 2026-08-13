@@ -75,30 +75,33 @@ class Endboss extends MovableObject {
     }
 
     handleState() {
-        switch (this.state) {
-            case 'IDLE':
-                break;
+        if (this.state === 'ALERT') {
+            this.playAnimation(this.IMAGES_ALERT);
+        }
 
-            case 'ALERT':
-                this.playAnimation(this.IMAGES_ALERT);
-                break;
+        if (this.state === 'WALK') {
+            this.handleWalking();
+        }
 
-            case 'WALK':
-                this.moveLeft();
-                this.playAnimation(this.IMAGES_WALKING);
-                break;
+        if (this.state === 'ATTACK') {
+            this.playAnimation(this.IMAGES_ATTACK);
+        }
 
-            case 'ATTACK':
-                this.playAnimation(this.IMAGES_ATTACK);
-                break;
+        this.handleFinalStates();
+    }
 
-            case 'HURT':
-                this.playAnimation(this.IMAGES_HURT);
-                break;
+    handleWalking() {
+        this.moveLeft();
+        this.playAnimation(this.IMAGES_WALKING);
+    }
 
-            case 'DEAD':
-                this.playAnimationOnce(this.IMAGES_DEAD);
-                break;
+    handleFinalStates() {
+        if (this.state === 'HURT') {
+            this.playAnimation(this.IMAGES_HURT);
+        }
+
+        if (this.state === 'DEAD') {
+            this.playAnimationOnce(this.IMAGES_DEAD);
         }
     }
 
@@ -120,27 +123,38 @@ class Endboss extends MovableObject {
         }
 
         this.energy -= 25;
-
         audioManager.play(audioManager.bosshurtSound);
 
         if (this.energy <= 0) {
-            this.energy = 0;
-            this.currentImage = 0;
-            this.state = 'DEAD';
+            this.setDeadState();
             return;
         }
 
+        this.setHurtState();
+    }
+
+    setDeadState() {
+        this.energy = 0;
+        this.currentImage = 0;
+        this.state = 'DEAD';
+    }
+
+    setHurtState() {
         this.currentImage = 0;
         this.state = 'HURT';
 
         setTimeout(() => {
-            if (
-                this.energy > 0 &&
-                this.state === 'HURT'
-            ) {
-                this.currentImage = 0;
-                this.state = 'WALK';
-            }
+            this.resetAfterHurt();
         }, 600);
+    }
+
+    resetAfterHurt() {
+        if (
+            this.energy > 0 &&
+            this.state === 'HURT'
+        ) {
+            this.currentImage = 0;
+            this.state = 'WALK';
+        }
     }
 }

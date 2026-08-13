@@ -19,15 +19,16 @@ class Chicken extends MovableObject {
         this.loadImages(this.IMAGES_WALKING);
         this.loadImages([this.IMAGE_DEAD]);
 
+        this.setChickenProperties(x, y);
+        this.animate();
+    }
+
+    setChickenProperties(x, y) {
         this.x = x;
         this.y = y;
-
         this.width = 60;
         this.height = 60;
-
         this.speed = 0.2 + Math.random() * 0.5;
-
-        this.animate();
     }
 
     animate() {

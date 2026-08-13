@@ -268,76 +268,100 @@ class WorldBase {
 
     constructor(canvas) {
         this.ctx = canvas.getContext('2d');
+        this.setupScreenImages();
+        this.createEnemies();
+        this.setupDrawHandlers();
+        this.run();
+    }
 
+    setupScreenImages() {
         this.gameOverImage.src =
             'img/9_intro_outro_screens/game_over/game over.png';
-
         this.youWinImage.src =
             'img/You won, you lost/You Win A.png';
-
         this.startScreenImage.src =
             'img/9_intro_outro_screens/start/startscreen_2.png';
+    }
 
+    createEnemies() {
+        this.createChickens();
+        this.createSmallChickens();
+    }
+
+    createChickens() {
         for (let i = 0; i < 5; i++) {
             this.chickens.push(
-                new Chicken(
-                    'img/3_enemies_chicken/chicken_normal/1_walk/1_w.png',
-                    500 + i * 300 + Math.random() * 200,
-                    360
-                )
+                this.createChicken(i)
             );
         }
+    }
 
+    createChicken(index) {
+        return new Chicken(
+            'img/3_enemies_chicken/chicken_normal/1_walk/1_w.png',
+            500 + index * 300 + Math.random() * 200,
+            360
+        );
+    }
+
+    createSmallChickens() {
         for (let i = 0; i < 3; i++) {
             this.smallChickens.push(
-                new SmallChicken(
-                    'img/3_enemies_chicken/chicken_small/1_walk/1_w.png',
-                    850 + i * 550,
-                    390
-                )
+                this.createSmallChicken(i)
             );
         }
+    }
 
-        this.run();
+    createSmallChicken(index) {
+        return new SmallChicken(
+            'img/3_enemies_chicken/chicken_small/1_walk/1_w.png',
+            850 + index * 550,
+            390
+        );
+    }
 
-        this.character.img.onload = () => {
-            this.draw();
-        };
+    setupDrawHandlers() {
+        this.character.img.onload = () => this.draw();
+        this.setupObjectDrawHandlers(this.backgrounds);
+        this.setupObjectDrawHandlers(this.clouds);
+    }
 
-        this.backgrounds.forEach(background => {
-            background.img.onload = () => {
+    setupObjectDrawHandlers(objects) {
+        objects.forEach(object => {
+            object.img.onload = () => {
                 this.draw();
             };
         });
-
-        this.clouds.forEach(cloud => {
-            cloud.img.onload = () => {
-                this.draw();
-            };
-        });
-
-        this.startScreenImage.src =
-            'img/9_intro_outro_screens/start/startscreen_2.png';
     }
 
     draw() {
         this.ctx.clearRect(0, 0, 720, 480);
 
         if (!this.gameStarted) {
-            this.ctx.drawImage(
-                this.startScreenImage,
-                0,
-                0,
-                720,
-                480
-            );
-
+            this.drawStartScreen();
             return;
         }
 
+        this.drawGameWorld();
+        this.drawStatusBars();
+        this.drawEndScreen();
+    }
+
+    drawStartScreen() {
+        this.ctx.drawImage(
+            this.startScreenImage,
+            0, 0, 720, 480
+        );
+    }
+
+    drawGameWorld() {
         this.ctx.save();
         this.ctx.translate(this.cameraX, 0);
+        this.drawWorldObjects();
+        this.ctx.restore();
+    }
 
+    drawWorldObjects() {
         this.addObjectsToMap(this.backgrounds);
         this.addObjectsToMap(this.clouds);
         this.addObjectsToMap(this.coins);
@@ -347,30 +371,35 @@ class WorldBase {
         this.addObjectsToMap(this.smallChickens);
         this.addToMap(this.endboss);
         this.addToMap(this.character);
+    }
 
-        this.ctx.restore();
-
+    drawStatusBars() {
         this.addToMap(this.healthStatusBar);
         this.addToMap(this.coinStatusBar);
         this.addToMap(this.bottleStatusBar);
+    }
+
+    drawEndScreen() {
         if (this.gameOver) {
-            this.ctx.drawImage(
-                this.gameOverImage,
-                0,
-                0,
-                720,
-                480
-            );
+            this.drawGameOverScreen();
         }
 
         if (this.gameWon) {
-            this.ctx.drawImage(
-                this.youWinImage,
-                0,
-                0,
-                720,
-                480
-            );
+            this.drawWinScreen();
         }
+    }
+
+    drawGameOverScreen() {
+        this.ctx.drawImage(
+            this.gameOverImage,
+            0, 0, 720, 480
+        );
+    }
+
+    drawWinScreen() {
+        this.ctx.drawImage(
+            this.youWinImage,
+            0, 0, 720, 480
+        );
     }
 }

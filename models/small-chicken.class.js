@@ -19,15 +19,16 @@ class SmallChicken extends MovableObject {
         this.loadImages(this.IMAGES_WALKING);
         this.loadImages([this.IMAGE_DEAD]);
 
+        this.setChickenProperties(x, y);
+        this.animate();
+    }
+
+    setChickenProperties(x, y) {
         this.x = x;
         this.y = y;
-
         this.width = 45;
         this.height = 45;
-
         this.speed = 0.5 + Math.random() * 0.7;
-
-        this.animate();
     }
 
     animate() {

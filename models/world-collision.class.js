@@ -11,10 +11,18 @@ class World extends WorldCheck {
             return;
         }
 
+        this.prepareImageDirection(object);
+        this.drawObject(object);
+        this.restoreImageDirection(object);
+    }
+
+    prepareImageDirection(object) {
         if (object.otherDirection) {
             this.flipImage(object);
         }
+    }
 
+    drawObject(object) {
         this.ctx.drawImage(
             object.img,
             object.x,
@@ -22,7 +30,9 @@ class World extends WorldCheck {
             object.width,
             object.height
         );
+    }
 
+    restoreImageDirection(object) {
         if (object.otherDirection) {
             this.flipImageBack(object);
         }
@@ -49,28 +59,30 @@ class World extends WorldCheck {
     startGameLoop() {
         this.intervalIds.push(
             setInterval(() => {
-                if (!this.gameStarted) {
-                    this.draw();
-                    return;
-                }
-
-                if (!this.character.isDead) {
-                    this.handleCharacterMovement();
-                }
-
-                this.draw();
+                this.updateGameFrame();
             }, 1000 / 60)
         );
+    }
+
+    updateGameFrame() {
+        if (!this.gameStarted) {
+            this.draw();
+            return;
+        }
+
+        if (!this.character.isDead) {
+            this.handleCharacterMovement();
+        }
+
+        this.draw();
     }
 
     startAnimationLoop() {
         this.intervalIds.push(
             setInterval(() => {
-                if (!this.gameStarted) {
-                    return;
+                if (this.gameStarted) {
+                    this.handleCharacterAnimation();
                 }
-
-                this.handleCharacterAnimation();
             }, 120)
         );
     }
@@ -78,21 +90,23 @@ class World extends WorldCheck {
     startCollisionLoop() {
         this.intervalIds.push(
             setInterval(() => {
-                if (!this.gameStarted) {
-                    return;
+                if (this.gameStarted) {
+                    this.runCollisionChecks();
                 }
-
-                this.checkCollisions();
-                this.checkSmallChickenCollisions();
-                this.checkCoinCollisions();
-                this.checkBottleCollisions();
-                this.checkEndbossActivation();
-                this.checkEndbossAttack();
-                this.checkEndbossCollision();
-                this.checkBottleEndbossCollision();
-                this.checkGameWon();
             }, 1000 / 60)
         );
+    }
+
+    runCollisionChecks() {
+        this.checkCollisions();
+        this.checkSmallChickenCollisions();
+        this.checkCoinCollisions();
+        this.checkBottleCollisions();
+        this.checkEndbossActivation();
+        this.checkEndbossAttack();
+        this.checkEndbossCollision();
+        this.checkBottleEndbossCollision();
+        this.checkGameWon();
     }
 
     handleCharacterMovement() {
@@ -104,45 +118,54 @@ class World extends WorldCheck {
 
     handleHorizontalMovement() {
         if (keyboard.RIGHT) {
-            this.character.moveRight();
-            this.character.resetIdleTimer();
+            this.moveCharacterRight();
         }
 
-        if (
-            keyboard.LEFT &&
-            this.character.x > 20
-        ) {
-            this.character.moveLeft();
-            this.character.resetIdleTimer();
+        if (keyboard.LEFT && this.character.x > 20) {
+            this.moveCharacterLeft();
         }
     }
 
+    moveCharacterRight() {
+        this.character.moveRight();
+        this.character.resetIdleTimer();
+    }
+
+    moveCharacterLeft() {
+        this.character.moveLeft();
+        this.character.resetIdleTimer();
+    }
+
     handleJump() {
-        if (
-            keyboard.UP &&
-            !this.character.isAboveGround()
-        ) {
+        if (keyboard.UP && !this.character.isAboveGround()) {
             this.character.jump();
             this.character.resetIdleTimer();
-
             audioManager.play(audioManager.jumpSound);
         }
     }
 
     handleBottleThrow() {
-        if (
+        if (this.canThrowBottle()) {
+            this.throwBottle();
+            this.character.resetIdleTimer();
+            this.startThrowCooldown();
+        }
+    }
+
+    canThrowBottle() {
+        return (
             keyboard.SPACE &&
             this.collectedBottles > 0 &&
             this.canThrow
-        ) {
-            this.throwBottle();
-            this.character.resetIdleTimer();
-            this.canThrow = false;
+        );
+    }
 
-            setTimeout(() => {
-                this.canThrow = true;
-            }, 500);
-        }
+    startThrowCooldown() {
+        this.canThrow = false;
+
+        setTimeout(() => {
+            this.canThrow = true;
+        }, 500);
     }
 
     updateCamera() {
@@ -154,42 +177,67 @@ class World extends WorldCheck {
 
     handleCharacterAnimation() {
         if (this.character.isDead) {
-            this.character.playAnimationOnce(
-                this.character.IMAGES_DEAD
-            );
-
+            this.playDeadAnimation();
         } else if (this.character.isHurt) {
-            this.character.playAnimation(
-                this.character.IMAGES_HURT
-            );
-
+            this.playHurtAnimation();
         } else if (this.character.isAboveGround()) {
-            this.character.playAnimation(
-                this.character.IMAGES_JUMPING
-            );
+            this.playJumpAnimation();
+        } else {
+            this.handleGroundAnimation();
+        }
+    }
 
-        } else if (keyboard.RIGHT || keyboard.LEFT) {
+    playDeadAnimation() {
+        this.character.playAnimationOnce(
+            this.character.IMAGES_DEAD
+        );
+    }
+
+    playHurtAnimation() {
+        this.character.playAnimation(
+            this.character.IMAGES_HURT
+        );
+    }
+
+    playJumpAnimation() {
+        this.character.playAnimation(
+            this.character.IMAGES_JUMPING
+        );
+    }
+
+    handleGroundAnimation() {
+        if (keyboard.RIGHT || keyboard.LEFT) {
             this.character.playAnimation(
                 this.character.IMAGES_WALKING
             );
-
         } else {
-            const idleTime =
-                new Date().getTime() -
-                this.character.lastAction;
-
-            if (idleTime >= 15000) {
-                this.character.playAnimation(
-                    this.character.IMAGES_LONG_IDLE
-                );
-                this.character.startSnoring();
-            } else {
-                this.character.stopSnoring();
-                this.character.playAnimation(
-                    this.character.IMAGES_IDLE
-                );
-            }
+            this.handleIdleAnimation();
         }
+    }
+
+    handleIdleAnimation() {
+        const idleTime =
+            new Date().getTime() - this.character.lastAction;
+
+        if (idleTime >= 15000) {
+            this.playLongIdleAnimation();
+        } else {
+            this.playIdleAnimation();
+        }
+    }
+
+    playLongIdleAnimation() {
+        this.character.playAnimation(
+            this.character.IMAGES_LONG_IDLE
+        );
+        this.character.startSnoring();
+    }
+
+    playIdleAnimation() {
+        this.character.stopSnoring();
+        this.character.playAnimation(
+            this.character.IMAGES_IDLE
+        );
     }
 
     stopGame() {
@@ -201,43 +249,42 @@ class World extends WorldCheck {
     }
 
     throwBottle() {
+        this.createThrowableBottle();
+        audioManager.play(audioManager.bottleSound);
+        this.collectedBottles--;
+        this.updateBottleStatusBar();
+    }
+
+    createThrowableBottle() {
         this.throwableObjects.push(
             new ThrowableObject(
                 this.character.x + 60,
                 this.character.y + 100
             )
         );
-        audioManager.play(audioManager.bottleSound);
+    }
 
-        this.collectedBottles--;
-
-        const bottlePercentage =
-            this.calculatePercentage(
-                this.collectedBottles,
-                this.bottlesTotal
-            );
-
-        this.bottleStatusBar.setPercentage(
-            bottlePercentage
+    updateBottleStatusBar() {
+        const percentage = this.calculatePercentage(
+            this.collectedBottles,
+            this.bottlesTotal
         );
+
+        this.bottleStatusBar.setPercentage(percentage);
     }
 
     startGame() {
         this.gameStarted = true;
-
-        audioManager.play(
-            audioManager.backgroundMusic
-        );
-
-        this.chickens.forEach(chicken => {
-            chicken.isActive = true;
-        });
-
-        this.smallChickens.forEach(chicken => {
-            chicken.isActive = true;
-        });
-
+        audioManager.play(audioManager.backgroundMusic);
+        this.activateEnemies(this.chickens);
+        this.activateEnemies(this.smallChickens);
         this.draw();
+    }
+
+    activateEnemies(enemies) {
+        enemies.forEach(enemy => {
+            enemy.isActive = true;
+        });
     }
 
     checkCollisions() {
@@ -247,10 +294,7 @@ class World extends WorldCheck {
     }
 
     handleChickenCollision(chicken) {
-        if (
-            chicken.isDead ||
-            this.character.isDead
-        ) {
+        if (chicken.isDead || this.character.isDead) {
             return;
         }
 
@@ -258,6 +302,10 @@ class World extends WorldCheck {
             return;
         }
 
+        this.resolveChickenCollision(chicken);
+    }
+
+    resolveChickenCollision(chicken) {
         if (this.isJumpingOnEnemy(chicken)) {
             this.killChicken(chicken);
         } else if (!this.character.isHurt) {
@@ -276,13 +324,14 @@ class World extends WorldCheck {
             return;
         }
 
-        const isColliding =
-            this.character.isColliding(chicken);
-
-        if (!isColliding) {
+        if (!this.character.isColliding(chicken)) {
             return;
         }
 
+        this.resolveSmallChickenCollision(chicken);
+    }
+
+    resolveSmallChickenCollision(chicken) {
         if (this.isJumpingOnEnemy(chicken)) {
             this.killSmallChicken(chicken);
         } else {
@@ -305,13 +354,16 @@ class World extends WorldCheck {
         this.character.speedY = 15;
 
         setTimeout(() => {
-            const index =
-                this.chickens.indexOf(chicken);
-
-            if (index !== -1) {
-                this.chickens.splice(index, 1);
-            }
+            this.removeChicken(chicken);
         }, 2000);
+    }
+
+    removeChicken(chicken) {
+        const index = this.chickens.indexOf(chicken);
+
+        if (index !== -1) {
+            this.chickens.splice(index, 1);
+        }
     }
 
     killSmallChicken(chicken) {
@@ -319,13 +371,16 @@ class World extends WorldCheck {
         this.character.speedY = 15;
 
         setTimeout(() => {
-            const index =
-                this.smallChickens.indexOf(chicken);
-
-            if (index !== -1) {
-                this.smallChickens.splice(index, 1);
-            }
+            this.removeSmallChicken(chicken);
         }, 2000);
+    }
+
+    removeSmallChicken(chicken) {
+        const index = this.smallChickens.indexOf(chicken);
+
+        if (index !== -1) {
+            this.smallChickens.splice(index, 1);
+        }
     }
 
     hitCharacterBySmallChicken() {

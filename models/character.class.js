@@ -116,17 +116,20 @@ class Character extends MovableObject {
             return;
         }
 
+        this.takeDamage(currentTime);
+        this.resetHurtState();
+    }
+
+    takeDamage(currentTime) {
         this.energy -= 20;
         this.lastHit = currentTime;
         this.isHurt = true;
         this.currentImage = 0;
-
         audioManager.play(audioManager.hurtSound);
+        this.energy = Math.max(this.energy, 0);
+    }
 
-        if (this.energy < 0) {
-            this.energy = 0;
-        }
-
+    resetHurtState() {
         setTimeout(() => {
             this.isHurt = false;
         }, 400);

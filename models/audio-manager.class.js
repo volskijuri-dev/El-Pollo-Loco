@@ -24,20 +24,17 @@ class AudioManager {
         this.updateMuteState();
     }
 
-    updateMuteState() {
-        const sounds = [
-            this.backgroundMusic,
-            this.bossSound,
-            this.jumpSound,
-            this.collectSound,
-            this.hurtSound,
-            this.chickenhurtSound,
-            this.bosshurtSound,
-            this.bottleSound,
-            this.winSound,
-            this.gameoverSound,
-            this.snoreSound
+    getAllSounds() {
+        return [
+            this.backgroundMusic, this.bossSound, this.jumpSound,
+            this.collectSound, this.hurtSound, this.chickenhurtSound,
+            this.bosshurtSound, this.bottleSound, this.winSound,
+            this.gameoverSound, this.snoreSound
         ];
+    }
+
+    updateMuteState() {
+        const sounds = this.getAllSounds();
 
         sounds.forEach(sound => {
             sound.muted = this.isMuted;
@@ -45,19 +42,7 @@ class AudioManager {
     }
 
     stopAllSounds() {
-        const sounds = [
-            this.backgroundMusic,
-            this.jumpSound,
-            this.collectSound,
-            this.hurtSound,
-            this.bottleSound,
-            this.bossSound,
-            this.bosshurtSound,
-            this.chickenhurtSound,
-            this.winSound,
-            this.gameoverSound,
-            this.snoreSound
-        ];
+        const sounds = this.getAllSounds();
 
         sounds.forEach(sound => {
             sound.pause();
