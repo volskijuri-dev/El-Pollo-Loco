@@ -2,6 +2,11 @@ class ThrowableObject extends MovableObject {
 
     moveInterval;
 
+    /**
+     * Creates a throwable bottle at the specified position.
+     * @param {number} x - The initial horizontal position of the bottle.
+     * @param {number} y - The initial vertical position of the bottle.
+     */
     constructor(x, y) {
         super();
 
@@ -20,6 +25,9 @@ class ThrowableObject extends MovableObject {
         this.throw();
     }
 
+    /**
+     * Throws the bottle by applying vertical and horizontal movement.
+     */
     throw() {
         this.speedY = 20;
         this.applyGravity();
@@ -29,6 +37,9 @@ class ThrowableObject extends MovableObject {
         }, 1000 / 60);
     }
 
+    /**
+     * Stops the horizontal movement of the bottle.
+     */
     stopMovement() {
         clearInterval(this.moveInterval);
     }

@@ -8,6 +8,11 @@ class Coin extends MovableObject {
         'img/8_coin/coin_2.png'
     ];
 
+    /**
+     * Creates a collectible coin at the specified position.
+     * @param {number} x - The horizontal position of the coin.
+     * @param {number} y - The vertical position of the coin.
+     */
     constructor(x, y) {
         super();
 
@@ -20,6 +25,9 @@ class Coin extends MovableObject {
         this.animate();
     }
 
+    /**
+     * Starts the coin animation.
+     */
     animate() {
         setInterval(() => {
             this.playAnimation(this.IMAGES_COIN);

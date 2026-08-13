@@ -8,11 +8,19 @@ class DrawableObject {
     imageCache = {};
     currentImage = 0;
 
+    /**
+     * Loads a single image from the specified path.
+     * @param {string} path - The path to the image.
+     */
     loadImage(path) {
         this.img = new Image();
         this.img.src = path;
     }
 
+    /**
+     * Loads multiple images and stores them in the image cache.
+     * @param {string[]} paths - The paths of the images to load.
+     */
     loadImages(paths) {
         paths.forEach(path => {
             const img = new Image();
@@ -21,6 +29,10 @@ class DrawableObject {
         });
     }
 
+    /**
+     * Plays an animation continuously using the provided images.
+     * @param {string[]} images - The image paths used for the animation.
+     */
     playAnimation(images) {
         const imageIndex =
             this.currentImage % images.length;
@@ -35,6 +47,10 @@ class DrawableObject {
         this.currentImage++;
     }
 
+    /**
+     * Plays an animation once and stops at the final image.
+     * @param {string[]} images - The image paths used for the animation.
+     */
     playAnimationOnce(images) {
         const lastImageIndex = images.length - 1;
         const nextImage = this.getAnimationImage(
@@ -51,6 +67,12 @@ class DrawableObject {
         }
     }
 
+    /**
+     * Returns the current image of a non-repeating animation.
+     * @param {string[]} images - The image paths used for the animation.
+     * @param {number} lastImageIndex - The index of the final animation image.
+     * @returns {HTMLImageElement} The cached animation image.
+     */
     getAnimationImage(images, lastImageIndex) {
         const imageIndex = Math.min(
             this.currentImage,

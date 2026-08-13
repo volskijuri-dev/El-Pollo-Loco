@@ -266,6 +266,10 @@ class WorldBase {
 
     throwableObjects = [];
 
+    /**
+     * Creates the game world and initializes all required objects.
+     * @param {HTMLCanvasElement} canvas - The canvas used to render the game.
+     */
     constructor(canvas) {
         this.ctx = canvas.getContext('2d');
         this.setupScreenImages();
@@ -274,6 +278,9 @@ class WorldBase {
         this.run();
     }
 
+    /**
+     * Sets the image sources for the start, game-over, and win screens.
+     */
     setupScreenImages() {
         this.gameOverImage.src =
             'img/9_intro_outro_screens/game_over/game over.png';
@@ -283,11 +290,17 @@ class WorldBase {
             'img/9_intro_outro_screens/start/startscreen_2.png';
     }
 
+    /**
+     * Creates all enemy types used in the game world.
+     */
     createEnemies() {
         this.createChickens();
         this.createSmallChickens();
     }
 
+    /**
+     * Creates the normal chickens and adds them to the game world.
+     */
     createChickens() {
         for (let i = 0; i < 5; i++) {
             this.chickens.push(
@@ -296,6 +309,11 @@ class WorldBase {
         }
     }
 
+    /**
+     * Creates a normal chicken at a position based on its index.
+     * @param {number} index - The index used to calculate the chicken position.
+     * @returns {Chicken} The created chicken.
+     */
     createChicken(index) {
         return new Chicken(
             'img/3_enemies_chicken/chicken_normal/1_walk/1_w.png',
@@ -304,6 +322,9 @@ class WorldBase {
         );
     }
 
+    /**
+     * Creates the small chickens and adds them to the game world.
+     */
     createSmallChickens() {
         for (let i = 0; i < 3; i++) {
             this.smallChickens.push(
@@ -312,6 +333,11 @@ class WorldBase {
         }
     }
 
+    /**
+     * Creates a small chicken at a position based on its index.
+     * @param {number} index - The index used to calculate the chicken position.
+     * @returns {SmallChicken} The created small chicken.
+     */
     createSmallChicken(index) {
         return new SmallChicken(
             'img/3_enemies_chicken/chicken_small/1_walk/1_w.png',
@@ -320,12 +346,19 @@ class WorldBase {
         );
     }
 
+    /**
+     * Sets image load handlers for objects that trigger rendering.
+     */
     setupDrawHandlers() {
         this.character.img.onload = () => this.draw();
         this.setupObjectDrawHandlers(this.backgrounds);
         this.setupObjectDrawHandlers(this.clouds);
     }
 
+    /**
+     * Adds image load handlers to the provided drawable objects.
+     * @param {DrawableObject[]} objects - The objects whose images should trigger rendering.
+     */
     setupObjectDrawHandlers(objects) {
         objects.forEach(object => {
             object.img.onload = () => {
@@ -334,6 +367,9 @@ class WorldBase {
         });
     }
 
+    /**
+     * Draws the current state of the game.
+     */
     draw() {
         this.ctx.clearRect(0, 0, 720, 480);
 
@@ -347,6 +383,9 @@ class WorldBase {
         this.drawEndScreen();
     }
 
+    /**
+     * Draws the start screen.
+     */
     drawStartScreen() {
         this.ctx.drawImage(
             this.startScreenImage,
@@ -354,6 +393,9 @@ class WorldBase {
         );
     }
 
+    /**
+     * Draws all game-world objects using the current camera position.
+     */
     drawGameWorld() {
         this.ctx.save();
         this.ctx.translate(this.cameraX, 0);
@@ -361,6 +403,9 @@ class WorldBase {
         this.ctx.restore();
     }
 
+    /**
+     * Draws all objects that belong to the scrolling game world.
+     */
     drawWorldObjects() {
         this.addObjectsToMap(this.backgrounds);
         this.addObjectsToMap(this.clouds);
@@ -373,12 +418,18 @@ class WorldBase {
         this.addToMap(this.character);
     }
 
+    /**
+     * Draws all status bars on the canvas.
+     */
     drawStatusBars() {
         this.addToMap(this.healthStatusBar);
         this.addToMap(this.coinStatusBar);
         this.addToMap(this.bottleStatusBar);
     }
 
+    /**
+     * Draws the appropriate end screen when the game is over or won.
+     */
     drawEndScreen() {
         if (this.gameOver) {
             this.drawGameOverScreen();
@@ -389,6 +440,9 @@ class WorldBase {
         }
     }
 
+    /**
+     * Draws the game-over screen.
+     */
     drawGameOverScreen() {
         this.ctx.drawImage(
             this.gameOverImage,
@@ -396,6 +450,9 @@ class WorldBase {
         );
     }
 
+    /**
+     * Draws the win screen.
+     */
     drawWinScreen() {
         this.ctx.drawImage(
             this.youWinImage,

@@ -1,11 +1,19 @@
 class World extends WorldCheck {
 
+    /**
+     * Adds multiple drawable objects to the canvas.
+     * @param {DrawableObject[]} objects - The objects to add to the canvas.
+     */
     addObjectsToMap(objects) {
         objects.forEach(object => {
             this.addToMap(object);
         });
     }
 
+    /**
+     * Adds a single drawable object to the canvas.
+     * @param {DrawableObject} object - The object to draw.
+     */
     addToMap(object) {
         if (!(object.img instanceof HTMLImageElement)) {
             return;
@@ -16,12 +24,20 @@ class World extends WorldCheck {
         this.restoreImageDirection(object);
     }
 
+    /**
+     * Flips an object before drawing if it faces the opposite direction.
+     * @param {DrawableObject} object - The object whose direction is prepared.
+     */
     prepareImageDirection(object) {
         if (object.otherDirection) {
             this.flipImage(object);
         }
     }
 
+    /**
+     * Draws a single object on the canvas.
+     * @param {DrawableObject} object - The object to draw.
+     */
     drawObject(object) {
         this.ctx.drawImage(
             object.img,
@@ -32,12 +48,20 @@ class World extends WorldCheck {
         );
     }
 
+    /**
+     * Restores the drawing direction after rendering a flipped object.
+     * @param {DrawableObject} object - The object whose direction is restored.
+     */
     restoreImageDirection(object) {
         if (object.otherDirection) {
             this.flipImageBack(object);
         }
     }
 
+    /**
+     * Mirrors an object horizontally before drawing.
+     * @param {DrawableObject} object - The object to flip.
+     */
     flipImage(object) {
         this.ctx.save();
         this.ctx.translate(object.width, 0);
@@ -45,17 +69,27 @@ class World extends WorldCheck {
         object.x = object.x * -1;
     }
 
+    /**
+     * Restores an object after horizontal mirroring.
+     * @param {DrawableObject} object - The flipped object to restore.
+     */
     flipImageBack(object) {
         object.x = object.x * -1;
         this.ctx.restore();
     }
 
+    /**
+     * Starts all main game loops.
+     */
     run() {
         this.startGameLoop();
         this.startAnimationLoop();
         this.startCollisionLoop();
     }
 
+    /**
+     * Starts the main rendering and movement loop.
+     */
     startGameLoop() {
         this.intervalIds.push(
             setInterval(() => {
@@ -64,6 +98,9 @@ class World extends WorldCheck {
         );
     }
 
+    /**
+     * Updates movement and renders the current game frame.
+     */
     updateGameFrame() {
         if (!this.gameStarted) {
             this.draw();
@@ -77,6 +114,9 @@ class World extends WorldCheck {
         this.draw();
     }
 
+    /**
+     * Starts the character animation loop.
+     */
     startAnimationLoop() {
         this.intervalIds.push(
             setInterval(() => {
@@ -87,6 +127,9 @@ class World extends WorldCheck {
         );
     }
 
+    /**
+     * Starts the collision detection loop.
+     */
     startCollisionLoop() {
         this.intervalIds.push(
             setInterval(() => {
@@ -97,6 +140,9 @@ class World extends WorldCheck {
         );
     }
 
+    /**
+     * Runs all collision and game-state checks.
+     */
     runCollisionChecks() {
         this.checkCollisions();
         this.checkSmallChickenCollisions();
@@ -109,6 +155,9 @@ class World extends WorldCheck {
         this.checkGameWon();
     }
 
+    /**
+     * Handles all character movement actions.
+     */
     handleCharacterMovement() {
         this.handleHorizontalMovement();
         this.handleJump();
@@ -116,6 +165,9 @@ class World extends WorldCheck {
         this.updateCamera();
     }
 
+    /**
+     * Handles horizontal keyboard movement.
+     */
     handleHorizontalMovement() {
         if (keyboard.RIGHT) {
             this.moveCharacterRight();
@@ -126,16 +178,25 @@ class World extends WorldCheck {
         }
     }
 
+    /**
+     * Moves the character to the right and resets the idle timer.
+     */
     moveCharacterRight() {
         this.character.moveRight();
         this.character.resetIdleTimer();
     }
 
+    /**
+     * Moves the character to the left and resets the idle timer.
+     */
     moveCharacterLeft() {
         this.character.moveLeft();
         this.character.resetIdleTimer();
     }
 
+    /**
+     * Handles character jumping.
+     */
     handleJump() {
         if (keyboard.UP && !this.character.isAboveGround()) {
             this.character.jump();
@@ -144,6 +205,9 @@ class World extends WorldCheck {
         }
     }
 
+    /**
+     * Handles throwing a bottle when allowed.
+     */
     handleBottleThrow() {
         if (this.canThrowBottle()) {
             this.throwBottle();
@@ -152,6 +216,10 @@ class World extends WorldCheck {
         }
     }
 
+    /**
+     * Checks whether the character can throw a bottle.
+     * @returns {boolean} True if a bottle can be thrown.
+     */
     canThrowBottle() {
         return (
             keyboard.SPACE &&
@@ -160,6 +228,9 @@ class World extends WorldCheck {
         );
     }
 
+    /**
+     * Starts the cooldown before another bottle can be thrown.
+     */
     startThrowCooldown() {
         this.canThrow = false;
 
@@ -168,6 +239,9 @@ class World extends WorldCheck {
         }, 500);
     }
 
+    /**
+     * Updates the camera position based on the character position.
+     */
     updateCamera() {
         this.cameraX = Math.min(
             -this.character.x + 100,
@@ -175,6 +249,9 @@ class World extends WorldCheck {
         );
     }
 
+    /**
+     * Selects and plays the correct character animation.
+     */
     handleCharacterAnimation() {
         if (this.character.isDead) {
             this.playDeadAnimation();
@@ -187,24 +264,36 @@ class World extends WorldCheck {
         }
     }
 
+    /**
+     * Plays the character death animation once.
+     */
     playDeadAnimation() {
         this.character.playAnimationOnce(
             this.character.IMAGES_DEAD
         );
     }
 
+    /**
+     * Plays the character hurt animation.
+     */
     playHurtAnimation() {
         this.character.playAnimation(
             this.character.IMAGES_HURT
         );
     }
 
+    /**
+     * Plays the character jumping animation.
+     */
     playJumpAnimation() {
         this.character.playAnimation(
             this.character.IMAGES_JUMPING
         );
     }
 
+    /**
+     * Handles walking or idle animation while on the ground.
+     */
     handleGroundAnimation() {
         if (keyboard.RIGHT || keyboard.LEFT) {
             this.character.playAnimation(
@@ -215,6 +304,9 @@ class World extends WorldCheck {
         }
     }
 
+    /**
+     * Selects the normal or long idle animation.
+     */
     handleIdleAnimation() {
         const idleTime =
             new Date().getTime() - this.character.lastAction;
@@ -226,6 +318,9 @@ class World extends WorldCheck {
         }
     }
 
+    /**
+     * Plays the long idle animation and starts snoring.
+     */
     playLongIdleAnimation() {
         this.character.playAnimation(
             this.character.IMAGES_LONG_IDLE
@@ -233,6 +328,9 @@ class World extends WorldCheck {
         this.character.startSnoring();
     }
 
+    /**
+     * Plays the normal idle animation and stops snoring.
+     */
     playIdleAnimation() {
         this.character.stopSnoring();
         this.character.playAnimation(
@@ -240,6 +338,9 @@ class World extends WorldCheck {
         );
     }
 
+    /**
+     * Stops all active game intervals.
+     */
     stopGame() {
         this.intervalIds.forEach(intervalId => {
             clearInterval(intervalId);
@@ -248,6 +349,9 @@ class World extends WorldCheck {
         this.intervalIds = [];
     }
 
+    /**
+     * Throws a bottle and updates the bottle inventory.
+     */
     throwBottle() {
         this.createThrowableBottle();
         audioManager.play(audioManager.bottleSound);
@@ -255,6 +359,9 @@ class World extends WorldCheck {
         this.updateBottleStatusBar();
     }
 
+    /**
+     * Creates a throwable bottle at the character position.
+     */
     createThrowableBottle() {
         this.throwableObjects.push(
             new ThrowableObject(
@@ -264,6 +371,9 @@ class World extends WorldCheck {
         );
     }
 
+    /**
+     * Updates the bottle status bar.
+     */
     updateBottleStatusBar() {
         const percentage = this.calculatePercentage(
             this.collectedBottles,
@@ -273,6 +383,9 @@ class World extends WorldCheck {
         this.bottleStatusBar.setPercentage(percentage);
     }
 
+    /**
+     * Starts the game and activates all enemies.
+     */
     startGame() {
         this.gameStarted = true;
         audioManager.play(audioManager.backgroundMusic);
@@ -281,18 +394,29 @@ class World extends WorldCheck {
         this.draw();
     }
 
+    /**
+     * Activates all provided enemies.
+     * @param {Array} enemies - The enemies to activate.
+     */
     activateEnemies(enemies) {
         enemies.forEach(enemy => {
             enemy.isActive = true;
         });
     }
 
+    /**
+     * Checks collisions with normal chickens.
+     */
     checkCollisions() {
         this.chickens.forEach(chicken => {
             this.handleChickenCollision(chicken);
         });
     }
 
+    /**
+     * Handles a collision between the character and a normal chicken.
+     * @param {Chicken} chicken - The chicken involved in the collision.
+     */
     handleChickenCollision(chicken) {
         if (chicken.isDead || this.character.isDead) {
             return;
@@ -305,6 +429,10 @@ class World extends WorldCheck {
         this.resolveChickenCollision(chicken);
     }
 
+    /**
+     * Resolves a collision with a normal chicken.
+     * @param {Chicken} chicken - The chicken involved in the collision.
+     */
     resolveChickenCollision(chicken) {
         if (this.isJumpingOnEnemy(chicken)) {
             this.killChicken(chicken);
@@ -313,12 +441,19 @@ class World extends WorldCheck {
         }
     }
 
+    /**
+     * Checks collisions with small chickens.
+     */
     checkSmallChickenCollisions() {
         this.smallChickens.forEach(chicken => {
             this.handleSmallChickenCollision(chicken);
         });
     }
 
+    /**
+     * Handles a collision between the character and a small chicken.
+     * @param {SmallChicken} chicken - The small chicken involved in the collision.
+     */
     handleSmallChickenCollision(chicken) {
         if (chicken.isDead || this.character.isDead) {
             return;
@@ -331,6 +466,10 @@ class World extends WorldCheck {
         this.resolveSmallChickenCollision(chicken);
     }
 
+    /**
+     * Resolves a collision with a small chicken.
+     * @param {SmallChicken} chicken - The small chicken involved in the collision.
+     */
     resolveSmallChickenCollision(chicken) {
         if (this.isJumpingOnEnemy(chicken)) {
             this.killSmallChicken(chicken);
@@ -339,6 +478,11 @@ class World extends WorldCheck {
         }
     }
 
+    /**
+     * Checks whether the character is jumping onto an enemy.
+     * @param {MovableObject} enemy - The enemy to check.
+     * @returns {boolean} True if the character is landing on the enemy.
+     */
     isJumpingOnEnemy(enemy) {
         const characterBottom =
             this.character.y + this.character.height;
@@ -349,6 +493,10 @@ class World extends WorldCheck {
         );
     }
 
+    /**
+     * Kills a normal chicken and bounces the character upward.
+     * @param {Chicken} chicken - The chicken to kill.
+     */
     killChicken(chicken) {
         chicken.die();
         this.character.speedY = 15;
@@ -358,6 +506,10 @@ class World extends WorldCheck {
         }, 2000);
     }
 
+    /**
+     * Removes a normal chicken from the game world.
+     * @param {Chicken} chicken - The chicken to remove.
+     */
     removeChicken(chicken) {
         const index = this.chickens.indexOf(chicken);
 
@@ -366,6 +518,10 @@ class World extends WorldCheck {
         }
     }
 
+    /**
+     * Kills a small chicken and bounces the character upward.
+     * @param {SmallChicken} chicken - The small chicken to kill.
+     */
     killSmallChicken(chicken) {
         chicken.die();
         this.character.speedY = 15;
@@ -375,6 +531,10 @@ class World extends WorldCheck {
         }, 2000);
     }
 
+    /**
+     * Removes a small chicken from the game world.
+     * @param {SmallChicken} chicken - The small chicken to remove.
+     */
     removeSmallChicken(chicken) {
         const index = this.smallChickens.indexOf(chicken);
 
@@ -383,12 +543,21 @@ class World extends WorldCheck {
         }
     }
 
+    /**
+     * Applies damage from a small chicken if the character is not hurt.
+     */
     hitCharacterBySmallChicken() {
         if (!this.character.isHurt) {
             this.handleCharacterHit();
         }
     }
 
+    /**
+     * Calculates a percentage value based on current and total amounts.
+     * @param {number} currentAmount - The current collected amount.
+     * @param {number} totalAmount - The total available amount.
+     * @returns {number} The calculated percentage, limited to 100.
+     */
     calculatePercentage(currentAmount, totalAmount) {
         return Math.min(
             currentAmount / totalAmount * 100,

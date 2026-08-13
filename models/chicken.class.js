@@ -12,6 +12,12 @@ class Chicken extends MovableObject {
     isDead = false;
     isActive = false;
 
+    /**
+     * Creates a chicken and loads its required images.
+     * @param {string} path - The path to the initial chicken image.
+     * @param {number} x - The initial horizontal position.
+     * @param {number} y - The initial vertical position.
+     */
     constructor(path, x, y) {
         super();
 
@@ -23,6 +29,11 @@ class Chicken extends MovableObject {
         this.animate();
     }
 
+    /**
+     * Sets the position, size, and movement speed of the chicken.
+     * @param {number} x - The horizontal position.
+     * @param {number} y - The vertical position.
+     */
     setChickenProperties(x, y) {
         this.x = x;
         this.y = y;
@@ -31,6 +42,9 @@ class Chicken extends MovableObject {
         this.speed = 0.2 + Math.random() * 0.5;
     }
 
+    /**
+     * Starts the movement and walking animation of the chicken.
+     */
     animate() {
         setInterval(() => {
             if (this.isActive && !this.isDead) {
@@ -45,6 +59,9 @@ class Chicken extends MovableObject {
         }, 100);
     }
 
+    /**
+     * Sets the chicken to the dead state and stops its movement.
+     */
     die() {
         if (this.isDead) {
             return;

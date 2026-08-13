@@ -13,6 +13,9 @@ class AudioManager {
     gameoverSound = new Audio('audio/gameover.mp3');
     snoreSound = new Audio('audio/snore.mp3');
 
+    /**
+     * Creates the audio manager and restores the saved mute state.
+     */
     constructor() {
         this.isMuted =
             localStorage.getItem('isMuted') === 'true';
@@ -24,6 +27,10 @@ class AudioManager {
         this.updateMuteState();
     }
 
+    /**
+     * Returns all sounds used by the game.
+     * @returns {HTMLAudioElement[]} All game audio elements.
+     */
     getAllSounds() {
         return [
             this.backgroundMusic, this.bossSound, this.jumpSound,
@@ -33,6 +40,9 @@ class AudioManager {
         ];
     }
 
+    /**
+     * Applies the current mute state to all game sounds.
+     */
     updateMuteState() {
         const sounds = this.getAllSounds();
 
@@ -41,6 +51,9 @@ class AudioManager {
         });
     }
 
+    /**
+     * Stops all game sounds and resets their playback position.
+     */
     stopAllSounds() {
         const sounds = this.getAllSounds();
 
@@ -50,6 +63,9 @@ class AudioManager {
         });
     }
 
+    /**
+     * Toggles the mute state and stores it in local storage.
+     */
     toggleMute() {
         this.isMuted = !this.isMuted;
 
@@ -65,6 +81,9 @@ class AudioManager {
         }
     }
 
+    /**
+     * Resumes the appropriate music for the current game state.
+     */
     resumeGameMusic() {
         if (world.endboss.isActive) {
             this.bossSound.play();
@@ -73,6 +92,10 @@ class AudioManager {
         }
     }
 
+    /**
+     * Plays a sound when audio is not muted.
+     * @param {HTMLAudioElement} sound - The sound to play.
+     */
     play(sound) {
         if (!this.isMuted) {
             sound.currentTime = 0;

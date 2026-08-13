@@ -1,4 +1,10 @@
 class BackgroundObject extends DrawableObject {
+    /**
+     * 
+     * @param {*} path 
+     * @param {*} x 
+     * @param {*} y 
+     */
     constructor(path, x, y) {
         super();
         this.loadImage(path);

@@ -5,6 +5,12 @@ class Cloud extends MovableObject {
     height = 250;
     speed = 0.15;
 
+    /**
+     * Creates a cloud at the specified position.
+     * @param {string} path - The path to the cloud image.
+     * @param {number} x - The initial horizontal position.
+     * @param {number} y - The initial vertical position.
+     */
     constructor(path, x, y) {
         super();
 
@@ -16,6 +22,9 @@ class Cloud extends MovableObject {
         this.animate();
     }
 
+    /**
+     * Starts the continuous movement of the cloud to the left.
+     */
     animate() {
         setInterval(() => {
             this.moveLeft();

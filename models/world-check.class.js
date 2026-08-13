@@ -1,5 +1,8 @@
 class WorldCheck extends WorldBase {
 
+    /**
+     * Checks whether the character collides with any coin.
+     */
     checkCoinCollisions() {
         for (let index = this.coins.length - 1; index >= 0; index--) {
             const coin = this.coins[index];
@@ -10,6 +13,10 @@ class WorldCheck extends WorldBase {
         }
     }
 
+    /**
+     * Collects a coin and updates the coin status bar.
+     * @param {number} index - The index of the collected coin.
+     */
     collectCoin(index) {
         this.coins.splice(index, 1);
         this.collectedCoins++;
@@ -23,6 +30,9 @@ class WorldCheck extends WorldBase {
         this.coinStatusBar.setPercentage(percentage);
     }
 
+    /**
+     * Checks whether the character collides with any bottle.
+     */
     checkBottleCollisions() {
         for (let index = this.bottles.length - 1; index >= 0; index--) {
             const bottle = this.bottles[index];
@@ -33,6 +43,10 @@ class WorldCheck extends WorldBase {
         }
     }
 
+    /**
+     * Collects a bottle and updates the bottle status bar.
+     * @param {number} index - The index of the collected bottle.
+     */
     collectBottle(index) {
         this.bottles.splice(index, 1);
         this.collectedBottles++;
@@ -46,6 +60,9 @@ class WorldCheck extends WorldBase {
         this.bottleStatusBar.setPercentage(percentage);
     }
 
+    /**
+     * Checks whether the endboss should be activated.
+     */
     checkEndbossActivation() {
         const distance =
             this.endboss.x - this.character.x;
@@ -55,6 +72,11 @@ class WorldCheck extends WorldBase {
         }
     }
 
+    /**
+     * Checks whether the endboss should activate at the given distance.
+     * @param {number} distance - The horizontal distance to the endboss.
+     * @returns {boolean} True if the endboss should be activated.
+     */
     shouldActivateEndboss(distance) {
         return (
             distance > 0 &&
@@ -63,6 +85,9 @@ class WorldCheck extends WorldBase {
         );
     }
 
+    /**
+     * Activates the endboss and switches to boss music.
+     */
     activateEndboss() {
         this.endboss.isActive = true;
         audioManager.backgroundMusic.pause();
@@ -71,6 +96,9 @@ class WorldCheck extends WorldBase {
         this.endboss.activateAlert();
     }
 
+    /**
+     * Updates the endboss attack state based on the character distance.
+     */
     checkEndbossAttack() {
         if (!this.endboss.isActive || this.isEndbossBusy()) {
             return;
@@ -83,6 +111,10 @@ class WorldCheck extends WorldBase {
             distance < 180 ? 'ATTACK' : 'WALK';
     }
 
+    /**
+     * Checks whether the endboss is currently in a busy state.
+     * @returns {boolean} True if the endboss is hurt, dead, or alert.
+     */
     isEndbossBusy() {
         return (
             this.endboss.state === 'HURT' ||
@@ -91,6 +123,9 @@ class WorldCheck extends WorldBase {
         );
     }
 
+    /**
+     * Checks whether the endboss collides with and can hit the character.
+     */
     checkEndbossCollision() {
         if (!this.canEndbossAttackCharacter()) {
             return;
@@ -100,6 +135,10 @@ class WorldCheck extends WorldBase {
         this.startEndbossHitCooldown();
     }
 
+    /**
+     * Checks whether the endboss is allowed to attack the character.
+     * @returns {boolean} True if the endboss can hit the character.
+     */
     canEndbossAttackCharacter() {
         return (
             this.endboss.state === 'ATTACK' &&
@@ -109,6 +148,9 @@ class WorldCheck extends WorldBase {
         );
     }
 
+    /**
+     * Starts the cooldown between endboss hits.
+     */
     startEndbossHitCooldown() {
         this.canEndbossHit = false;
 
@@ -117,6 +159,9 @@ class WorldCheck extends WorldBase {
         }, 1000);
     }
 
+    /**
+     * Checks all throwable bottles for collisions with the endboss.
+     */
     checkBottleEndbossCollision() {
         for (
             let index = this.throwableObjects.length - 1;
@@ -127,6 +172,10 @@ class WorldCheck extends WorldBase {
         }
     }
 
+    /**
+     * Checks whether a throwable bottle hits the endboss.
+     * @param {number} index - The index of the throwable bottle.
+     */
     checkBottleHit(index) {
         const bottle = this.throwableObjects[index];
 
@@ -135,6 +184,11 @@ class WorldCheck extends WorldBase {
         }
     }
 
+    /**
+     * Checks whether a bottle can damage the endboss.
+     * @param {ThrowableObject} bottle - The bottle to check.
+     * @returns {boolean} True if the bottle can hit the endboss.
+     */
     canBottleHitEndboss(bottle) {
         return (
             this.endboss.isActive &&
@@ -143,18 +197,30 @@ class WorldCheck extends WorldBase {
         );
     }
 
+    /**
+     * Applies a bottle hit to the endboss and removes the bottle.
+     * @param {ThrowableObject} bottle - The bottle that hit the endboss.
+     * @param {number} index - The index of the throwable bottle.
+     */
     hitEndbossWithBottle(bottle, index) {
         this.endboss.hit();
         bottle.stopMovement();
         this.throwableObjects.splice(index, 1);
     }
 
+    /**
+     * Checks whether the game has been won.
+     */
     checkGameWon() {
         if (this.hasWonGame()) {
             this.startWinSequence();
         }
     }
 
+    /**
+     * Checks whether all conditions for winning the game are met.
+     * @returns {boolean} True if the game has been won.
+     */
     hasWonGame() {
         return (
             this.endboss.state === 'DEAD' &&
@@ -163,6 +229,9 @@ class WorldCheck extends WorldBase {
         );
     }
 
+    /**
+     * Starts the delayed win sequence.
+     */
     startWinSequence() {
         this.winSequenceStarted = true;
 
@@ -171,6 +240,9 @@ class WorldCheck extends WorldBase {
         }, 2000);
     }
 
+    /**
+     * Finishes the win sequence and displays the restart button.
+     */
     finishGameWon() {
         this.gameWon = true;
         audioManager.bossSound.pause();
@@ -179,6 +251,9 @@ class WorldCheck extends WorldBase {
         this.showRestartButton();
     }
 
+    /**
+     * Applies damage to the character and updates the health bar.
+     */
     handleCharacterHit() {
         this.character.hit();
 
@@ -191,6 +266,9 @@ class WorldCheck extends WorldBase {
         }
     }
 
+    /**
+     * Sets the character to the dead state and starts the game-over delay.
+     */
     handleCharacterDeath() {
         this.character.die();
 
@@ -199,6 +277,9 @@ class WorldCheck extends WorldBase {
         }, 2000);
     }
 
+    /**
+     * Handles the game-over state and stops active game sounds.
+     */
     handleGameOver() {
         this.gameOver = true;
         this.character.stopSnoring();
@@ -207,6 +288,9 @@ class WorldCheck extends WorldBase {
         this.showRestartButton();
     }
 
+    /**
+     * Stops the background and boss music.
+     */
     stopGameMusic() {
         audioManager.backgroundMusic.pause();
         audioManager.backgroundMusic.currentTime = 0;
@@ -215,10 +299,16 @@ class WorldCheck extends WorldBase {
         audioManager.bossSound.currentTime = 0;
     }
 
+    /**
+     * Plays the game-over sound.
+     */
     playGameOverSound() {
         audioManager.play(audioManager.gameoverSound);
     }
 
+    /**
+     * Displays the restart button.
+     */
     showRestartButton() {
         document
             .getElementById('restart-button')

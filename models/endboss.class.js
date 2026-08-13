@@ -51,6 +51,9 @@ class Endboss extends MovableObject {
         'img/4_enemie_boss_chicken/5_dead/G26.png'
     ];
 
+    /**
+     * Creates the endboss and loads all required animation images.
+     */
     constructor() {
         super();
 
@@ -64,6 +67,9 @@ class Endboss extends MovableObject {
         this.animate();
     }
 
+    /**
+     * Starts the animation loop and handles the active boss state.
+     */
     animate() {
         setInterval(() => {
             if (!this.isActive) {
@@ -74,6 +80,9 @@ class Endboss extends MovableObject {
         }, 150);
     }
 
+    /**
+     * Handles the animation and movement for the current boss state.
+     */
     handleState() {
         if (this.state === 'ALERT') {
             this.playAnimation(this.IMAGES_ALERT);
@@ -90,11 +99,17 @@ class Endboss extends MovableObject {
         this.handleFinalStates();
     }
 
+    /**
+     * Moves the boss to the left and plays its walking animation.
+     */
     handleWalking() {
         this.moveLeft();
         this.playAnimation(this.IMAGES_WALKING);
     }
 
+    /**
+     * Handles the hurt and dead animation states of the boss.
+     */
     handleFinalStates() {
         if (this.state === 'HURT') {
             this.playAnimation(this.IMAGES_HURT);
@@ -105,6 +120,9 @@ class Endboss extends MovableObject {
         }
     }
 
+    /**
+     * Activates the alert state before the boss starts walking.
+     */
     activateAlert() {
         if (this.state !== 'IDLE') {
             return;
@@ -117,6 +135,9 @@ class Endboss extends MovableObject {
         }, 2000);
     }
 
+    /**
+     * Reduces the boss energy and updates its state after a hit.
+     */
     hit() {
         if (this.energy <= 0) {
             return;
@@ -133,12 +154,18 @@ class Endboss extends MovableObject {
         this.setHurtState();
     }
 
+    /**
+     * Sets the boss to the dead state.
+     */
     setDeadState() {
         this.energy = 0;
         this.currentImage = 0;
         this.state = 'DEAD';
     }
 
+    /**
+     * Sets the boss to the hurt state and starts its recovery delay.
+     */
     setHurtState() {
         this.currentImage = 0;
         this.state = 'HURT';
@@ -148,6 +175,9 @@ class Endboss extends MovableObject {
         }, 600);
     }
 
+    /**
+     * Returns the boss to the walking state after recovering from a hit.
+     */
     resetAfterHurt() {
         if (
             this.energy > 0 &&

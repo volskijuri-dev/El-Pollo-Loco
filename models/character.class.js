@@ -70,9 +70,15 @@ class Character extends MovableObject {
         'img/2_character_pepe/5_dead/D-56.png',
         'img/2_character_pepe/5_dead/D-57.png'
     ];
+
     isDead = false;
 
-
+    /**
+     * Creates the character and loads all required animation images.
+     * @param {string} path - The path to the initial character image.
+     * @param {number} x - The initial horizontal position.
+     * @param {number} y - The initial vertical position.
+     */
     constructor(path, x, y) {
         super();
         this.loadImage(path);
@@ -87,21 +93,33 @@ class Character extends MovableObject {
         this.applyGravity();
     }
 
+    /**
+     * Moves the character to the right and updates its direction.
+     */
     moveRight() {
         super.moveRight();
         this.otherDirection = false;
     }
 
+    /**
+     * Moves the character to the left and updates its direction.
+     */
     moveLeft() {
         super.moveLeft();
         this.otherDirection = true;
     }
 
+    /**
+     * Resets the idle timer and stops the snoring sound.
+     */
     resetIdleTimer() {
         this.lastAction = new Date().getTime();
         this.stopSnoring();
     }
 
+    /**
+     * Sets the character to the dead state and stops its movement.
+     */
     die() {
         this.isDead = true;
         this.speed = 0;
@@ -109,6 +127,10 @@ class Character extends MovableObject {
         this.currentImage = 0;
     }
 
+    /**
+     * Handles a hit if the character is not currently protected
+     * by the hit cooldown.
+     */
     hit() {
         const currentTime = new Date().getTime();
 
@@ -120,6 +142,10 @@ class Character extends MovableObject {
         this.resetHurtState();
     }
 
+    /**
+     * Reduces the character's energy and activates the hurt state.
+     * @param {number} currentTime - Timestamp of the current hit.
+     */
     takeDamage(currentTime) {
         this.energy -= 20;
         this.lastHit = currentTime;
@@ -129,12 +155,18 @@ class Character extends MovableObject {
         this.energy = Math.max(this.energy, 0);
     }
 
+    /**
+     * Resets the hurt state after a short delay.
+     */
     resetHurtState() {
         setTimeout(() => {
             this.isHurt = false;
         }, 400);
     }
 
+    /**
+     * Starts the snoring sound if the character is not already snoring.
+     */
     startSnoring() {
         if (this.isSnoring) {
             return;
@@ -144,6 +176,9 @@ class Character extends MovableObject {
         audioManager.play(audioManager.snoreSound);
     }
 
+    /**
+     * Stops the snoring sound and resets its playback position.
+     */
     stopSnoring() {
         if (!this.isSnoring) {
             return;
