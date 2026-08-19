@@ -29,7 +29,7 @@ class WorldPlay extends WorldCheck {
             return;
         }
 
-        if (!this.character.isDead) {
+        if (!this.character.isDead && !this.gameWon) {
             this.handleCharacterMovement();
         }
 
@@ -175,6 +175,8 @@ class WorldPlay extends WorldCheck {
      * Selects and plays the correct character animation.
      */
     handleCharacterAnimation() {
+        if (this.gameWon) return;
+
         if (this.character.isDead) {
             this.playDeadAnimation();
         } else if (this.character.isHurt) {
@@ -310,6 +312,7 @@ class WorldPlay extends WorldCheck {
      */
     startGame() {
         this.gameStarted = true;
+        this.character.resetIdleTimer();
         audioManager.play(audioManager.backgroundMusic);
         this.activateEnemies(this.chickens);
         this.activateEnemies(this.smallChickens);

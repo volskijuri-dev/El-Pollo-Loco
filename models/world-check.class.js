@@ -245,6 +245,7 @@ class WorldCheck extends WorldBase {
      */
     finishGameWon() {
         this.gameWon = true;
+        this.character.stopSnoring();
         audioManager.bossSound.pause();
         audioManager.bossSound.currentTime = 0;
         audioManager.play(audioManager.winSound);
