@@ -4,6 +4,13 @@ class DrawableObject {
     height = 300;
     width = 150;
 
+    offset = {
+        top: 0,
+        right: 0,
+        bottom: 0,
+        left: 0
+    };
+
     img;
     imageCache = {};
     currentImage = 0;

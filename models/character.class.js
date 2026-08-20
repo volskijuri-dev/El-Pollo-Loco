@@ -8,6 +8,13 @@ class Character extends MovableObject {
     lastAction = new Date().getTime();
     isSnoring = false;
 
+    offset = {
+        top: 100,
+        right: 30,
+        bottom: 10,
+        left: 30
+    };
+
     IMAGES_WALKING = [
         'img/2_character_pepe/2_walk/W-21.png',
         'img/2_character_pepe/2_walk/W-22.png',
@@ -93,6 +100,19 @@ class Character extends MovableObject {
         this.applyGravity();
     }
 
+    isAboveGround() {
+        return this.y < 130;
+    }
+
+    /**
+     * Keeps the character on a fixed ground position.
+     */
+    setGroundPosition() {
+        if (this.y > 130) {
+            this.y = 130;
+            this.speedY = 0;
+        }
+    }
     /**
      * Moves the character to the right and updates its direction.
      */

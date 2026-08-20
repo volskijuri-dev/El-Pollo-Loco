@@ -12,6 +12,7 @@ class MovableObject extends DrawableObject {
             if (this.isAboveGround() || this.speedY > 0) {
                 this.y -= this.speedY;
                 this.speedY -= this.acceleration;
+                this.setGroundPosition?.();
             }
         }, 1000 / 25);
     }
@@ -51,9 +52,15 @@ class MovableObject extends DrawableObject {
      * @returns {boolean} True if both objects are colliding.
      */
     isColliding(otherObject) {
-        return this.x + this.width > otherObject.x &&
-               this.x < otherObject.x + otherObject.width &&
-               this.y + this.height > otherObject.y &&
-               this.y < otherObject.y + otherObject.height;
+        return (
+            this.x + this.width - this.offset.right >
+            otherObject.x + otherObject.offset.left &&
+            this.x + this.offset.left <
+            otherObject.x + otherObject.width - otherObject.offset.right &&
+            this.y + this.height - this.offset.bottom >
+            otherObject.y + otherObject.offset.top &&
+            this.y + this.offset.top <
+            otherObject.y + otherObject.height - otherObject.offset.bottom
+        );
     }
 }

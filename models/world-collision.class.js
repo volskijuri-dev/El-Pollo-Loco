@@ -159,13 +159,18 @@ class World extends WorldPlay {
      */
     isJumpingOnEnemy(enemy) {
         const characterBottom =
-            this.character.y + this.character.height;
+            this.character.y + this.character.height -
+            this.character.offset.bottom;
+
+        const enemyTop =
+            enemy.y + enemy.offset.top;
 
         return (
             this.character.speedY < 0 &&
-            characterBottom <= enemy.y + 30
+            characterBottom <= enemyTop + 30
         );
     }
+
 
     /**
      * Kills a normal chicken and bounces the character upward.

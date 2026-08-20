@@ -71,7 +71,7 @@ class WorldBase {
     character = new Character(
         'img/2_character_pepe/1_idle/idle/I-1.png',
         100,
-        150
+        130
     );
 
     backgrounds = [
