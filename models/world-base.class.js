@@ -7,7 +7,7 @@ class WorldBase {
     gameOver = false;
     cameraX = 0;
     collectedCoins = 0;
-    coinsTotal = 6;
+    coinsTotal = 5;
     collectedBottles = 0;
     bottlesTotal = 4;
     canThrow = true;
@@ -251,7 +251,6 @@ class WorldBase {
     coins = [
         new Coin(400, 280),
         new Coin(750, 220),
-        new Coin(1100, 300),
         new Coin(1500, 240),
         new Coin(1900, 290),
         new Coin(2350, 210)
