@@ -199,12 +199,16 @@ class WorldCheck extends WorldBase {
     }
 
     /**
-     * Applies a bottle hit to the endboss and removes the bottle.
+     * Applies a bottle hit to the endboss.
      * @param {ThrowableObject} bottle - The bottle that hit the endboss.
-     * @param {number} index - The index of the throwable bottle.
      */
-    hitEndbossWithBottle(bottle, index) {
+    hitEndbossWithBottle(bottle) {
         this.endboss.hit();
+
+        this.endbossStatusBar.setPercentage(
+            this.endboss.energy
+        );
+
         bottle.splash();
     }
 

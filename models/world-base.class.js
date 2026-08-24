@@ -47,6 +47,15 @@ class WorldBase {
         'img/7_statusbars/1_statusbar/3_statusbar_bottle/blue/100.png'
     ];
 
+    IMAGES_ENDBOSS_BAR = [
+        'img/7_statusbars/2_statusbar_endboss/blue/blue0.png',
+        'img/7_statusbars/2_statusbar_endboss/blue/blue20.png',
+        'img/7_statusbars/2_statusbar_endboss/blue/blue40.png',
+        'img/7_statusbars/2_statusbar_endboss/blue/blue60.png',
+        'img/7_statusbars/2_statusbar_endboss/blue/blue80.png',
+        'img/7_statusbars/2_statusbar_endboss/blue/blue100.png'
+    ];
+
     healthStatusBar = new StatusBar(
         this.IMAGES_HEALTH_BAR,
         20,
@@ -66,6 +75,13 @@ class WorldBase {
         20,
         110,
         0
+    );
+
+    endbossStatusBar = new StatusBar(
+        this.IMAGES_ENDBOSS_BAR,
+        500,
+        10,
+        100
     );
 
     character = new Character(
@@ -424,6 +440,10 @@ class WorldBase {
         this.addToMap(this.healthStatusBar);
         this.addToMap(this.coinStatusBar);
         this.addToMap(this.bottleStatusBar);
+
+        if (this.endboss.isActive) {
+            this.addToMap(this.endbossStatusBar);
+        }
     }
 
     /**
