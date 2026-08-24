@@ -10,6 +10,13 @@ class Endboss extends MovableObject {
     state = 'IDLE';
     isActive = false;
 
+    offset = {
+        top: 60,
+        right: 35,
+        bottom: 20,
+        left: 55
+    };
+
     IMAGES_ALERT = [
         'img/4_enemie_boss_chicken/2_alert/G5.png',
         'img/4_enemie_boss_chicken/2_alert/G6.png',

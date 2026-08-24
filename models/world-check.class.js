@@ -180,7 +180,7 @@ class WorldCheck extends WorldBase {
         const bottle = this.throwableObjects[index];
 
         if (this.canBottleHitEndboss(bottle)) {
-            this.hitEndbossWithBottle(bottle, index);
+            this.hitEndbossWithBottle(bottle);
         }
     }
 
@@ -192,6 +192,7 @@ class WorldCheck extends WorldBase {
     canBottleHitEndboss(bottle) {
         return (
             this.endboss.isActive &&
+            !bottle.isSplashing &&
             bottle.isColliding(this.endboss) &&
             this.endboss.energy > 0
         );
@@ -204,8 +205,7 @@ class WorldCheck extends WorldBase {
      */
     hitEndbossWithBottle(bottle, index) {
         this.endboss.hit();
-        bottle.stopMovement();
-        this.throwableObjects.splice(index, 1);
+        bottle.splash();
     }
 
     /**
