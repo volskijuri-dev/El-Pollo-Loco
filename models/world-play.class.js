@@ -75,6 +75,17 @@ class WorldPlay extends WorldCheck {
         this.checkEndbossCollision();
         this.checkBottleEndbossCollision();
         this.checkGameWon();
+        this.removeFinishedBottles();
+    }
+
+    /**
+ * Removes finished throwable bottles.
+ */
+    removeFinishedBottles() {
+        this.throwableObjects =
+            this.throwableObjects.filter(
+                bottle => !bottle.isFinished
+            );
     }
 
     /**
