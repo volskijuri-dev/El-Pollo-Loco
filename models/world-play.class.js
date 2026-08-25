@@ -218,10 +218,10 @@ class WorldPlay extends WorldCheck {
     }
 
     /**
-     * Plays the character jumping animation.
+     * Plays the complete jumping animation once.
      */
     playJumpAnimation() {
-        this.character.playAnimation(
+        this.character.playAnimationOnce(
             this.character.IMAGES_JUMPING
         );
     }

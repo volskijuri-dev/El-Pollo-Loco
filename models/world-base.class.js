@@ -79,7 +79,7 @@ class WorldBase {
 
     endbossStatusBar = new StatusBar(
         this.IMAGES_ENDBOSS_BAR,
-        500,
+        460,
         10,
         100
     );

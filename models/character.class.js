@@ -208,4 +208,12 @@ class Character extends MovableObject {
         audioManager.snoreSound.pause();
         audioManager.snoreSound.currentTime = 0;
     }
+
+    /**
+ * Makes the character jump and resets the jump animation.
+ */
+    jump() {
+        super.jump();
+        this.currentImage = 0;
+    }
 }
