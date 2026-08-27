@@ -102,6 +102,9 @@ canvas {
 }
 
 #restart-button {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
     margin-top: 20px;
     padding: 14px 36px;
     font-size: 24px;
@@ -334,6 +337,19 @@ canvas {
         border-radius: 10px;
     }
 
+    #restart-button {
+        position: absolute;
+        left: 50%;
+        bottom: 10px;
+        transform: translateX(-50%);
+        margin: 0;
+        padding: 7px 18px;
+        font-size: 15px;
+        border-width: 2px;
+        border-radius: 10px;
+        z-index: 50;
+    }
+
     #mute-button {
         top: 10px;
         right: 10px;
@@ -343,17 +359,6 @@ canvas {
         top: 10px;
         left: 50%;
         transform: translateX(-50%);
-    }
-
-    #restart-button {
-        position: fixed;
-        left: 50%;
-        bottom: 75px;
-        transform: translateX(-50%);
-        margin: 0;
-        padding: 10px 24px;
-        font-size: 18px;
-        z-index: 50;
     }
 
     #restart-button:hover {
@@ -377,14 +382,4 @@ canvas {
         height: min(78dvh, calc(88vw / 1.5), 600px);
         transform: translateY(-150px);
     }
-
-    #restart-button {
-        bottom: 300px;
-    }
-
-    .impressum-link {
-        bottom: 360px;
-    }
-
-
 }
