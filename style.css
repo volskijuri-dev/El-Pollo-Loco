@@ -230,6 +230,19 @@ canvas {
     text-decoration: underline;
 }
 
+.throw-control {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+}
+
+.controls-bottle {
+    width: 24px;
+    height: 32px;
+    object-fit: contain;
+}
+
 @media (pointer: coarse),
 (any-pointer: coarse) {
     .mobile-controls {
