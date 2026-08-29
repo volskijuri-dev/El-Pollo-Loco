@@ -19,10 +19,12 @@ function init() {
  */
 function setupButtons() {
     const restartButton = document.getElementById('restart-button');
+    const menuButton = document.getElementById('menu-button');
     const startButton = document.getElementById('start-button');
     const muteButton = document.getElementById('mute-button');
 
     restartButton.addEventListener('click', restartGame);
+    menuButton.addEventListener('click', returnToMenu);
     setupStartButton(startButton);
     setupMuteButton(muteButton);
 }
@@ -146,9 +148,28 @@ function updateMuteButton(button) {
 function restartGame() {
     stopCurrentGame();
     createNewGame();
-    hideRestartButton();
+    hideEndButtons();
     hideStartButton();
     world.startGame();
+}
+
+/**
+ * Returns from the end screen to the main menu.
+ */
+function returnToMenu() {
+    stopCurrentGame();
+    createNewGame();
+    hideEndButtons();
+    showStartButton();
+}
+
+/**
+ * Displays the start button.
+ */
+function showStartButton() {
+    document
+        .getElementById('start-button')
+        .style.display = '';
 }
 
 /**
@@ -168,12 +189,11 @@ function createNewGame() {
 }
 
 /**
- * Hides the restart button.
+ * Hides both end-screen buttons.
  */
-function hideRestartButton() {
-    document
-        .getElementById('restart-button')
-        .classList.add('hidden');
+function hideEndButtons() {
+    document.getElementById('restart-button').classList.add('hidden');
+    document.getElementById('menu-button').classList.add('hidden');
 }
 
 /**

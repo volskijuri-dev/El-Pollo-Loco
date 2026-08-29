@@ -252,8 +252,33 @@ class WorldCheck extends WorldBase {
         audioManager.bossSound.pause();
         audioManager.bossSound.currentTime = 0;
         audioManager.play(audioManager.winSound);
-        this.showRestartButton();
+        this.showEndButtons();
     }
+
+    /**
+     * Handles the game-over state and stops active game sounds.
+     */
+    handleGameOver() {
+        this.gameOver = true;
+        this.character.stopSnoring();
+        this.stopGameMusic();
+        this.playGameOverSound();
+        this.showEndButtons();
+    }
+
+    /**
+     * Displays both end-screen buttons.
+     */
+    showEndButtons() {
+        document
+            .getElementById('restart-button')
+            .classList.remove('hidden');
+
+        document
+            .getElementById('menu-button')
+            .classList.remove('hidden');
+    }
+
 
     /**
      * Applies damage to the character and updates the health bar.
@@ -282,17 +307,6 @@ class WorldCheck extends WorldBase {
     }
 
     /**
-     * Handles the game-over state and stops active game sounds.
-     */
-    handleGameOver() {
-        this.gameOver = true;
-        this.character.stopSnoring();
-        this.stopGameMusic();
-        this.playGameOverSound();
-        this.showRestartButton();
-    }
-
-    /**
      * Stops the background and boss music.
      */
     stopGameMusic() {
@@ -311,11 +325,15 @@ class WorldCheck extends WorldBase {
     }
 
     /**
-     * Displays the restart button.
+     * Displays both end-screen buttons.
      */
-    showRestartButton() {
+    showEndButtons() {
         document
             .getElementById('restart-button')
+            .classList.remove('hidden');
+
+        document
+            .getElementById('menu-button')
             .classList.remove('hidden');
     }
 }
