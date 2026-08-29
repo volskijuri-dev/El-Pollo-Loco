@@ -151,6 +151,7 @@ class Endboss extends MovableObject {
         }
 
         this.energy -= 25;
+        this.speed += 1.5;
         audioManager.play(audioManager.bosshurtSound);
 
         if (this.energy <= 0) {
@@ -179,7 +180,7 @@ class Endboss extends MovableObject {
 
         setTimeout(() => {
             this.resetAfterHurt();
-        }, 600);
+        }, 400);
     }
 
     /**
