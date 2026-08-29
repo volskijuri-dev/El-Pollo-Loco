@@ -97,18 +97,17 @@ class WorldCheck extends WorldBase {
     }
 
     /**
-     * Updates the endboss attack state based on the character distance.
+     * Updates the endboss attack state based on collision with the character.
      */
     checkEndbossAttack() {
         if (!this.endboss.isActive || this.isEndbossBusy()) {
             return;
         }
 
-        const distance =
-            this.endboss.x - this.character.x;
-
         this.endboss.state =
-            distance < 180 ? 'ATTACK' : 'WALK';
+            this.character.isColliding(this.endboss)
+                ? 'ATTACK'
+                : 'WALK';
     }
 
     /**
@@ -156,7 +155,7 @@ class WorldCheck extends WorldBase {
 
         setTimeout(() => {
             this.canEndbossHit = true;
-        }, 1000);
+        }, 700);
     }
 
     /**

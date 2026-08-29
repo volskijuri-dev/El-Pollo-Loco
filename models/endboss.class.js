@@ -6,7 +6,7 @@ class Endboss extends MovableObject {
     y = 55;
 
     energy = 100;
-    speed = 2;
+    speed = 5;
     state = 'IDLE';
     isActive = false;
 
@@ -100,10 +100,18 @@ class Endboss extends MovableObject {
         }
 
         if (this.state === 'ATTACK') {
-            this.playAnimation(this.IMAGES_ATTACK);
+            this.handleAttack();
         }
 
         this.handleFinalStates();
+    }
+
+    /**
+     * Moves the boss forward while playing the attack animation.
+     */
+    handleAttack() {
+        this.moveLeft();
+        this.playAnimation(this.IMAGES_ATTACK);
     }
 
     /**
