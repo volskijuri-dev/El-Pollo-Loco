@@ -107,10 +107,9 @@ class Endboss extends MovableObject {
     }
 
     /**
-     * Moves the boss forward while playing the attack animation.
+     * Plays the attack animation without moving the boss forward.
      */
     handleAttack() {
-        this.moveLeft();
         this.playAnimation(this.IMAGES_ATTACK);
     }
 

@@ -97,7 +97,7 @@ class WorldCheck extends WorldBase {
     }
 
     /**
-     * Updates the endboss attack state based on collision with the character.
+     * Updates the endboss attack state based on attack range.
      */
     checkEndbossAttack() {
         if (!this.endboss.isActive || this.isEndbossBusy()) {
@@ -105,9 +105,25 @@ class WorldCheck extends WorldBase {
         }
 
         this.endboss.state =
-            this.character.isColliding(this.endboss)
+            this.isEndbossInAttackRange()
                 ? 'ATTACK'
                 : 'WALK';
+    }
+
+    /**
+ * Checks whether the character is within the endboss attack range.
+ * @returns {boolean} True if the character is within attack range.
+ */
+    isEndbossInAttackRange() {
+        const bossLeft =
+            this.endboss.x + this.endboss.offset.left;
+
+        const characterRight =
+            this.character.x +
+            this.character.width -
+            this.character.offset.right;
+
+        return bossLeft - characterRight <= 25;
     }
 
     /**
@@ -141,7 +157,7 @@ class WorldCheck extends WorldBase {
     canEndbossAttackCharacter() {
         return (
             this.endboss.state === 'ATTACK' &&
-            this.character.isColliding(this.endboss) &&
+            this.isEndbossInAttackRange() &&
             this.canEndbossHit &&
             !this.character.isDead
         );
@@ -261,9 +277,25 @@ class WorldCheck extends WorldBase {
     handleGameOver() {
         this.gameOver = true;
         this.character.stopSnoring();
+        this.deactivateEnemies();
         this.stopGameMusic();
         this.playGameOverSound();
         this.showEndButtons();
+    }
+
+    /**
+ * Deactivates all enemies after the game has ended.
+ */
+    deactivateEnemies() {
+        this.chickens.forEach(chicken => {
+            chicken.isActive = false;
+        });
+
+        this.smallChickens.forEach(chicken => {
+            chicken.isActive = false;
+        });
+
+        this.endboss.isActive = false;
     }
 
     /**
@@ -322,18 +354,5 @@ class WorldCheck extends WorldBase {
      */
     playGameOverSound() {
         audioManager.play(audioManager.gameoverSound);
-    }
-
-    /**
-     * Displays both end-screen buttons.
-     */
-    showEndButtons() {
-        document
-            .getElementById('restart-button')
-            .classList.remove('hidden');
-
-        document
-            .getElementById('menu-button')
-            .classList.remove('hidden');
     }
 }
