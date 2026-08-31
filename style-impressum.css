@@ -99,3 +99,41 @@ body {
         font-size: 15px;
     }
 }
+
+@media (orientation: landscape) and (max-height: 500px) {
+    body {
+        align-items: center;
+        padding: 10px;
+        min-height: 100dvh;
+    }
+
+    .impressum {
+        margin-top: 0;
+        max-width: 760px;
+        padding: 16px 24px;
+        border-radius: 14px;
+    }
+
+    .impressum h1 {
+        margin-bottom: 12px;
+        font-size: 28px;
+    }
+
+    .impressum h2 {
+        margin-top: 12px;
+        margin-bottom: 5px;
+        font-size: 19px;
+    }
+
+    .impressum p {
+        margin: 5px 0;
+        line-height: 1.25;
+        font-size: 14px;
+    }
+
+    .impressum a {
+        margin-top: 10px;
+        padding: 7px 14px;
+        font-size: 14px;
+    }
+}

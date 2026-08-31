@@ -12,6 +12,7 @@ function init() {
     setupMobileControls();
     setupButtons();
     setupControlsInfo();
+    showImpressumLink();
 }
 
 /**
@@ -37,6 +38,7 @@ function setupStartButton(button) {
     button.addEventListener('click', () => {
         world.startGame();
         button.style.display = 'none';
+        hideImpressumLink();
     });
 }
 
@@ -150,6 +152,7 @@ function restartGame() {
     createNewGame();
     hideEndButtons();
     hideStartButton();
+    hideImpressumLink();
     world.startGame();
 }
 
@@ -161,6 +164,7 @@ function returnToMenu() {
     createNewGame();
     hideEndButtons();
     showStartButton();
+    showImpressumLink();
 }
 
 /**
@@ -233,3 +237,21 @@ window.addEventListener('keydown', (event) => {
 window.addEventListener('keyup', (event) => {
     setKeyboardKey(event, false);
 });
+
+/**
+ * Displays the impressum link in the main menu.
+ */
+function showImpressumLink() {
+    document
+        .querySelector('.impressum-link')
+        .style.display = 'block';
+}
+
+/**
+ * Hides the impressum link while the game is running.
+ */
+function hideImpressumLink() {
+    document
+        .querySelector('.impressum-link')
+        .style.display = 'none';
+}

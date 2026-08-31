@@ -224,21 +224,28 @@ canvas {
     padding: 30px;
 }
 
-#controls-info.hidden {
-    display: none;
-}
-
 .impressum-link {
-    margin-top: 100px;
-    color: white;
-    font-size: 16px;
+    padding: 7px 14px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #4a2500;
     text-decoration: none;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    background: linear-gradient(180deg, #ffd54a, #ff9800);
+    border: 2px solid #9b4300;
+    border-radius: 10px;
+    box-shadow:
+        0 4px 0 #713000,
+        0 6px 10px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
 }
 
 .impressum-link:hover {
-    color: #ffb300;
-    text-decoration: underline;
+    transform: translateY(-2px);
+}
+
+.impressum-link:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 #713000;
 }
 
 .throw-control {
@@ -254,8 +261,6 @@ canvas {
     object-fit: contain;
 }
 
-
-
 @media (pointer: coarse),
 (any-pointer: coarse) {
     .mobile-controls {
@@ -263,13 +268,6 @@ canvas {
     }
 
     #controls-button {
-        display: none;
-    }
-}
-
-@media (max-width: 900px) and (pointer: coarse),
-(max-width: 900px) and (any-pointer: coarse) {
-    .impressum-link {
         display: none;
     }
 }
@@ -302,6 +300,10 @@ canvas {
 
     #rotate-message {
         display: block;
+    }
+
+    .impressum-link {
+        display: none !important;
     }
 }
 
@@ -393,7 +395,36 @@ canvas {
     }
 
     .impressum-link {
-        display: none;
+        position: fixed;
+        left: 50%;
+        bottom: 10px;
+        transform: translateX(-50%);
+        margin: 0;
+        z-index: 200;
+    }
+}
+
+@media (orientation: landscape) and (pointer: coarse) and (max-height: 500px),
+(orientation: landscape) and (any-pointer: coarse) and (max-height: 500px) {
+    .impressum-link {
+        position: fixed;
+        left: 15px;
+        top: 10px;
+        bottom: auto;
+        width: fit-content;
+        height: auto;
+        padding: 7px 14px;
+        font-size: 14px;
+        font-weight: bold;
+        color: #4a2500;
+        text-decoration: none;
+        white-space: nowrap;
+        background: linear-gradient(180deg, #ffd54a, #ff9800);
+        border: 2px solid #9b4300;
+        border-radius: 10px;
+        box-shadow: 0 4px 0 #713000, 0 6px 10px rgba(0, 0, 0, 0.3);
+        transform: none;
+        z-index: 200;
     }
 }
 
@@ -419,5 +450,12 @@ canvas {
 
     .end-buttons {
         bottom: -70px;
+    }
+
+    .impressum-link {
+        position: fixed;
+        left: 50%;
+        bottom: 225px;
+        transform: translateX(-50%);
     }
 }
