@@ -81,7 +81,8 @@ class WorldCheck extends WorldBase {
         return (
             distance > 0 &&
             distance < 700 &&
-            !this.endboss.isActive
+            !this.endboss.isActive &&
+            !this.gameOver
         );
     }
 

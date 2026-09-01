@@ -1,3 +1,14 @@
+@media (pointer: coarse),
+(any-pointer: coarse) {
+    .mobile-controls {
+        display: flex;
+    }
+
+    #controls-button {
+        display: none;
+    }
+}
+
 @media (orientation: portrait) and (pointer: coarse),
 (orientation: portrait) and (any-pointer: coarse) {
 

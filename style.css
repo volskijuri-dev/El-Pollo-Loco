@@ -131,6 +131,11 @@ canvas {
     box-shadow: 0 7px 0 #713000, 0 11px 18px rgba(0, 0, 0, 0.4);
 }
 
+#menu-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 7px 0 #713000, 0 11px 18px rgba(0, 0, 0, 0.4);
+}
+
 #restart-button:active {
     transform: translateY(2px);
     box-shadow: 0 2px 0 #713000;
@@ -225,7 +230,7 @@ canvas {
 }
 
 .impressum-link {
-    padding: 7px 14px;
+    padding: 7px 20px;
     font-size: 14px;
     font-weight: bold;
     color: #4a2500;
@@ -237,6 +242,7 @@ canvas {
         0 4px 0 #713000,
         0 6px 10px rgba(0, 0, 0, 0.3);
     cursor: pointer;
+    margin-top: 15px;
 }
 
 .impressum-link:hover {
@@ -259,15 +265,4 @@ canvas {
     width: 24px;
     height: 32px;
     object-fit: contain;
-}
-
-@media (pointer: coarse),
-(any-pointer: coarse) {
-    .mobile-controls {
-        display: flex;
-    }
-
-    #controls-button {
-        display: none;
-    }
 }

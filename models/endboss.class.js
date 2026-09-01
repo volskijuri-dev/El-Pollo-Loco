@@ -6,7 +6,7 @@ class Endboss extends MovableObject {
     y = 55;
 
     energy = 100;
-    speed = 5;
+    speed = 25;
     state = 'IDLE';
     isActive = false;
 
