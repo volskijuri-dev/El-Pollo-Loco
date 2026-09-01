@@ -246,7 +246,7 @@ class WorldPlay extends WorldCheck {
         const idleTime =
             new Date().getTime() - this.character.lastAction;
 
-        if (idleTime >= 15000) {
+        if (idleTime >= 7000) {
             this.playLongIdleAnimation();
         } else {
             this.playIdleAnimation();
