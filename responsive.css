@@ -228,3 +228,48 @@
         bottom: -70px;
     }
 }
+
+/* Rechtliche Links auf mobilen Geräten */
+
+@media (orientation: portrait) and (pointer: coarse),
+(orientation: portrait) and (any-pointer: coarse) {
+
+    body {
+        overflow-y: auto;
+    }
+
+    .legal-links {
+        display: none;
+    }
+}
+
+@media (orientation: landscape) and (pointer: coarse),
+(orientation: landscape) and (any-pointer: coarse) {
+
+    .legal-links {
+        position: fixed;
+        flex-direction: column;
+        top: 8px;
+        left: 8px;
+        z-index: 200;
+        display: flex;
+        gap: 6px;
+        margin: 0;
+    }
+
+    .legal-links a {
+        min-width: auto;
+        padding: 5px 8px;
+        font-size: 11px;
+        white-space: nowrap;
+    }
+}
+
+@media (orientation: landscape) and (pointer: coarse) and (max-height: 400px),
+(orientation: landscape) and (any-pointer: coarse) and (max-height: 400px) {
+
+    .legal-links a {
+        padding: 4px 6px;
+        font-size: 10px;
+    }
+}

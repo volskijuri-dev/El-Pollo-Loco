@@ -16,9 +16,9 @@ class AudioManager {
     /**
      * Creates the audio manager and restores the saved mute state.
      */
+
     constructor() {
-        this.isMuted =
-            localStorage.getItem('isMuted') === 'true';
+        this.isMuted = false;
 
         this.backgroundMusic.loop = true;
         this.bossSound.loop = true;
@@ -26,6 +26,7 @@ class AudioManager {
 
         this.updateMuteState();
     }
+
 
     /**
      * Returns all sounds used by the game.
@@ -66,13 +67,9 @@ class AudioManager {
     /**
      * Toggles the mute state and stores it in local storage.
      */
+
     toggleMute() {
         this.isMuted = !this.isMuted;
-
-        localStorage.setItem(
-            'isMuted',
-            this.isMuted
-        );
 
         this.updateMuteState();
 
@@ -80,6 +77,7 @@ class AudioManager {
             this.resumeGameMusic();
         }
     }
+
 
     /**
      * Resumes the appropriate music for the current game state.
